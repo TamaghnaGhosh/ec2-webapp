@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>EC2 CI/CD Website</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+        min-height: 100vh;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 8%;
+        background: rgba(15, 23, 42, 0.8);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #38bdf8;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 25px;
+      }
+
+      nav a:hover {
+        color: #38bdf8;
+      }
+
+      .hero {
+        min-height: 75vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .hero-content {
+        max-width: 750px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #0ea5e9;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 56px;
+        margin-bottom: 20px;
+      }
+
+      h1 span {
+        color: #38bdf8;
+      }
+
+      .hero p {
+        font-size: 20px;
+        line-height: 1.7;
+        color: #cbd5e1;
+        margin-bottom: 30px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .primary {
+        background: #0ea5e9;
+        color: white;
+      }
+
+      .primary:hover {
+        background: #0284c7;
+      }
+
+      .secondary {
+        border: 1px solid #38bdf8;
+        color: #38bdf8;
+      }
+
+      .secondary:hover {
+        background: #38bdf8;
+        color: #0f172a;
+      }
+
+      /* Features */
+      .features {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 50px 8%;
+        flex-wrap: wrap;
+      }
+
+      .card {
+        width: 280px;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .card h3 {
+        margin-bottom: 12px;
+        color: #38bdf8;
+      }
+
+      .card p {
+        color: #cbd5e1;
+        line-height: 1.6;
+      }
+
+      /* Deployment Workflow */
+      .workflow-section {
+        padding: 80px 8%;
+        text-align: center;
+      }
+
+      .workflow-section h2 {
+        font-size: 38px;
+        margin-bottom: 15px;
+      }
+
+      .workflow-section > p {
+        color: #cbd5e1;
+        font-size: 18px;
+        margin-bottom: 50px;
+      }
+
+      .workflow {
+        max-width: 1100px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .workflow-step {
+        flex: 1;
+        min-width: 180px;
+        padding: 30px 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 15px;
+        position: relative;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #0ea5e9;
+        border-radius: 50%;
+        font-weight: bold;
+      }
+
+      .workflow-step h3 {
+        color: #38bdf8;
+        margin-bottom: 10px;
+      }
+
+      .workflow-step p {
+        color: #cbd5e1;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+
+      .arrow {
+        display: flex;
+        align-items: center;
+        color: #38bdf8;
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      /* Deployment Status */
+      .status {
+        max-width: 900px;
+        margin: 20px auto 70px;
+        padding: 25px;
+        background: rgba(34, 197, 94, 0.08);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .status h3 {
+        color: #4ade80;
+        margin-bottom: 8px;
+      }
+
+      .status p {
+        color: #cbd5e1;
+      }
+
+      footer {
+        text-align: center;
+        padding: 25px;
+        color: #94a3b8;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @media (max-width: 700px) {
+        h1 {
+          font-size: 40px;
+        }
+
+        .hero p {
+          font-size: 16px;
+        }
+
+        nav {
+          padding: 20px;
+        }
+
+        nav a {
+          margin-left: 10px;
+        }
+
+        .buttons {
+          flex-direction: column;
+        }
+
+        .workflow {
+          flex-direction: column;
+        }
+
+        .arrow {
+          justify-content: center;
+          transform: rotate(90deg);
+        }
+
+        .workflow-section h2 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="logo">EC2 CI/CD</div>
+
+      <div>
+        <a href="#">Home</a>
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+
+        <div class="badge">
+          AWS EC2 + GitHub Actions CI/CD
+        </div>
+
+        <h1>
+          Deployed on <span>EC2</span>
+        </h1>
+
+        <p>
+          This website is deployed on an Amazon EC2 instance
+          using an automated CI/CD pipeline powered by GitHub Actions.
+        </p>
+
+        <div class="buttons">
+
+          <a href="#workflow" class="btn primary">
+            View Workflow
+          </a>
+
+          <a
+            href="https://github.com/features/actions"
+            class="btn secondary"
+            target="_blank"
+          >
+            GitHub Actions
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+
+      <div class="card">
+        <h3>🚀 EC2 Deployment</h3>
+        <p>
+          The application runs on an Amazon EC2 instance
+          that provides the server environment for deployment.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔄 GitHub Actions</h3>
+        <p>
+          Every code push to GitHub can automatically trigger
+          the CI/CD workflow and deploy the latest changes.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>⚡ Automated CI/CD</h3>
+        <p>
+          The deployment process automatically builds, transfers,
+          and updates the application on the EC2 server.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- Deployment Workflow -->
+    <section class="workflow-section" id="workflow">
+
+      <h2>EC2 Deployment Workflow</h2>
+
+      <p>
+        From source code to production with an automated GitHub Actions pipeline.
+      </p>
+
+      <div class="workflow">
+
+        <!-- Step 1 -->
+        <div class="workflow-step">
+          <div class="step-number">1</div>
+
+          <h3>👨‍💻 Developer</h3>
+
+          <p>
+            Developer updates the application code
+            and pushes the changes to GitHub.
+          </p>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <!-- Step 2 -->
+        <div class="workflow-step">
+          <div class="step-number">2</div>
+
+          <h3>📦 GitHub</h3>
+
+          <p>
+            The source code is stored in a GitHub
+            repository and a push triggers the workflow.
+          </p>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <!-- Step 3 -->
+        <div class="workflow-step">
+          <div class="step-number">3</div>
+
+          <h3>⚙️ GitHub Actions</h3>
+
+          <p>
+            GitHub Actions runs the CI/CD pipeline,
+            prepares the application and starts deployment.
+          </p>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <!-- Step 4 -->
+        <div class="workflow-step">
+          <div class="step-number">4</div>
+
+          <h3>☁️ EC2 Instance</h3>
+
+          <p>
+            The workflow connects to the EC2 server
+            and deploys the latest application files.
+          </p>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <!-- Step 5 -->
+        <div class="workflow-step">
+          <div class="step-number">5</div>
+
+          <h3>🌐 Live Website</h3>
+
+          <p>
+            The updated application becomes available
+            to users through the EC2-hosted web server.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Deployment Status -->
+    <section class="status">
+
+      <h3>● Deployment Pipeline Active</h3>
+
+      <p>
+        GitHub → GitHub Actions → EC2 → Live Website
+      </p>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      © 2026 EC2 CI/CD Website | Deployed with GitHub Actions
+    </footer>
+
+  </body>
+</html>
+
